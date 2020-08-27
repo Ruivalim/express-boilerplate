@@ -16,6 +16,8 @@ const errorhandler = require('errorhandler');
 const cookieParser = require('cookie-parser');
 const compression = require('compression');
 const optimus = require('connect-image-optimus');
+const nunjucks = require('nunjucks');
+
 const routes = require("./routes");
 
 // Upload docs https://github.com/expressjs/multer
@@ -53,6 +55,16 @@ const HOST = process.env.APP_HOST || '0.0.0.0';
 
 // Express init
 const app = express();
+
+// Nunjucks config
+nunjucks.configure('views', {
+    autoescape: true,
+    express: app,
+    watch: true
+});
+
+// Nunjucks init
+app.set('view engine', '.njk')
 
 // Express Middlewares initialization
 app.use(helmet());
