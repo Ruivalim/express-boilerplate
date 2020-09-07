@@ -23,3 +23,4 @@
 - [mysql](https://github.com/mysqljs/mysql)
 - [node-notifier](https://github.com/mikaelbr/node-notifier)
 - [rotating-file-stream](https://github.com/iccicci/rotating-file-stream)
+- [nunjucks](https://github.com/mozilla/nunjucks)

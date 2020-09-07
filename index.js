@@ -31,22 +31,22 @@ const logger = require("./utils/Logger");
 // Allowed List
 const allowlist = [];
 
-// CORS OPTIONS 
+// CORS OPTIONS
 const corsOptionsDelegate = (req, callback) => {
-    let corsOptions;
-    if (allowlist.indexOf(req.header('Origin')) !== -1) {
-        corsOptions = { origin: true };
-    } else {
-        corsOptions = { origin: false };
-    }
+	let corsOptions;
+	if (allowlist.indexOf(req.header('Origin')) !== -1) {
+		corsOptions = { origin: true };
+	} else {
+		corsOptions = { origin: false };
+	}
 
-    callback(null, corsOptions);
+	callback(null, corsOptions);
 }
 
 // HTTP LOGS FILE
 const accessLogStream = rfs.createStream('access.log', {
-    interval: '1d',
-    path: path.join(__dirname, 'logs')
+	interval: '1d',
+	path: path.join(__dirname, 'logs')
 });
 
 // Getting PORT and HOST from env
@@ -58,9 +58,9 @@ const app = express();
 
 // Nunjucks config
 nunjucks.configure('views', {
-    autoescape: true,
-    express: app,
-    watch: true
+	autoescape: true,
+	express: app,
+	watch: true
 });
 
 // Nunjucks init
@@ -78,32 +78,32 @@ app.use(cookieParser());
 
 // If allowd list is empty, will use the default cors config
 if( allowlist.length == 0 ){
-    app.use(cors());
+	app.use(cors());
 }else{
-    app.use(cors(corsOptionsDelegate));
+	app.use(cors(corsOptionsDelegate));
 }
 
 // Only in Dev plugins
 if (process.env.NODE_ENV === 'development') {
-    // Error handling
-    const errorHandler = (err, str, req) => {
-        const title = 'Error in ' + req.method + ' ' + req.url;
+	// Error handling
+	const errorHandler = (err, str, req) => {
+		const title = 'Error in ' + req.method + ' ' + req.url;
 
-        notifier.notify({
-            title: title,
-            message: str
-        });
-    }
-    app.use(errorhandler({ log: errorHandler }));
+		notifier.notify({
+			title: title,
+			message: str
+		});
+	}
+	app.use(errorhandler({ log: errorHandler }));
 }
 // Only in Prod plugins
 if (process.env.NODE_ENV === 'production') {
-    // gzip Compression
-    const shouldCompress = (req, res) => {
-        if (req.headers['x-no-compression']) { return false; }
-        return compression.filter(req, res);
-    }
-    app.use(compression({ filter: shouldCompress }));
+	// gzip Compression
+	const shouldCompress = (req, res) => {
+		if (req.headers['x-no-compression']) { return false; }
+		return compression.filter(req, res);
+	}
+	app.use(compression({ filter: shouldCompress }));
 }
 
 const staticPath = __dirname + '/public/';
@@ -113,10 +113,10 @@ app.use(optimus(staticPath));
 // Static files
 app.use(express.static(staticPath));
 
-// Autorouting 
+// Autorouting
 Object.entries(routes).forEach(([key, value]) => {
-    const routeFile = require('./routes/'+value);
-    app.use(key, routeFile);
+	const routeFile = require('./routes/'+value);
+	app.use(key, routeFile);
 });
 
 // App initialization
