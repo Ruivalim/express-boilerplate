@@ -1,8 +1,7 @@
 {
-  "name": "expressboilerplate",
+  "name": "express-boilerplate",
   "version": "1.0.0",
   "description": "Express Boilerplate",
-  "author": "Rui Valim <r.valim.junior@gmail.com>",
   "main": "index.js",
   "scripts": {
     "start": "NODE_ENV=development nodemon index.js",
@@ -10,6 +9,11 @@
     "analyse": "npm audit",
     "snyk": "snyk test"
   },
+	"author": {
+		"name": "Rui Valim Jr",
+		"email": "r.valim.junior@gmail.com"
+	},
+	"license": "MIT",
   "dependencies": {
     "body-parser": "^1.19.0",
     "colors": "^1.4.0",
