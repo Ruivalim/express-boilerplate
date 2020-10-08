@@ -43,34 +43,50 @@ const debugLogStream = rfs.createStream('debug.log', {
 	path: path.join(__dirname, '../logs')
 });
 
+const constructMessage = (message) => {
+	if ( typeof message == "object" ){
+		let cache = [];
+		message = JSON.stringify(message, (key, value) => {
+			if (typeof value === 'object' && value !== null) {
+				if (cache.includes(value)) return;
+				cache.push(value);
+			}
+			return value;
+		});
+		cache = null;
+	}
+
+	return "[" + moment().format(this.format) + "] " + message;
+}
+
 const logger = {
 	format: "DD/MMM/YYYY:HH:mm:ss",
 	error: (message) => {
 		if( 1 > logLevelNumber ){ return; }
-		const msg = "[" + moment().format(this.format) + "] " + message;
+		const msg = constructMessage(message);
 		errorLogStream.write(msg+"\n");
 		console.log(colors.red(msg));
 	},
 	warn: (message) => {
 		if( 2 > logLevelNumber ){ return; }
-		const msg = "[" + moment().format(this.format) + "] " + message;
+		const msg = constructMessage(message);
 		warnLogStream.write(msg+"\n");
 		console.log(colors.yellow(msg));
 	},
 	info: (message) => {
 		if( 3 > logLevelNumber ){ return; }
-		const msg = "[" + moment().format(this.format) + "] " + message;
+		const msg = constructMessage(message);
 		infoLogStream.write(msg+"\n");
 		console.log(colors.cyan(msg));
 	},
 	debug: (message) => {
 		if( 4 > logLevelNumber ){ return; }
-		const msg = "[" + moment().format(this.format) + "] " + message;
+		const msg = constructMessage(message);
 		debugLogStream.write(msg+"\n");
 		console.log(colors.magenta(msg));
 	},
 	log: (message) => {
-		const msg = "[" + moment().format(this.format) + "] " + message;
+		const msg = constructMessage(message);
 		if (process.env.NODE_ENV === 'development') {
 			notifier.notify({
 				title: process.env.APP_NAME || "App server",
